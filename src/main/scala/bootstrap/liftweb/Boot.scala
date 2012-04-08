@@ -3,14 +3,13 @@ package bootstrap.liftweb
 import net.liftweb._
 import util._
 import Helpers._
-
 import common._
 import http._
 import sitemap._
 import Loc._
 import mapper._
-
 import code.model._
+import net.liftweb.http.js.JE.JsRaw
 
 
 /**
@@ -55,13 +54,16 @@ class Boot {
     LiftRules.setSiteMapFunc(() => sitemapMutators(sitemap))
 
     //Show the spinny image when an Ajax call starts
-    LiftRules.ajaxStart =
-      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
+//    LiftRules.ajaxStart =
+//      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
     
     // Make the spinny image go away when it ends
-    LiftRules.ajaxEnd =
-      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
+//    LiftRules.ajaxEnd =
+//      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
+     LiftRules.ajaxStart = Full(() => JsRaw("$.blockUI();").cmd)
+     LiftRules.ajaxEnd = Full(() => JsRaw("$.unblockUI();").cmd) 
+ 
     // Force the request to be UTF-8
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
